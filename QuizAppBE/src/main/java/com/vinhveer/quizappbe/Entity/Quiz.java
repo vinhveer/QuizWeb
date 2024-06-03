@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Quizzes {
+public class Quiz {
     @Id
     private String id;
     private String title;
