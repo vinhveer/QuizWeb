@@ -8,3 +8,32 @@
     width: 30px;
     height: 30px;
 }
+
+.img-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.btn-login {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav {
+    font-weight: 600;
+}
+
+.active {
+    color: #007bff;
+}
+
+.img-avatar-canva {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+i {
+    font-size: 20px;
+}

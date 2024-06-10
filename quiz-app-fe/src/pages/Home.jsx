@@ -1,10 +1,10 @@
 import React from 'react'
-import QuizCardDisplay from '../components/QuizCardDisplay/QuizCardDisplay'
+import Header from '../components/Header/Header'
 
 const Home = () => {
   return (
     <div>
-      <QuizCardDisplay />
+      <Header />
     </div>
   )
 }
