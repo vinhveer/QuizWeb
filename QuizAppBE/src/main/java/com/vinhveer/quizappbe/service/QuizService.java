@@ -1,15 +1,21 @@
 package com.vinhveer.quizappbe.service;
 
 import com.vinhveer.quizappbe.entity.Quiz;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface QuizService {
-    List<Quiz> getAllQuizzes();
-    Optional<Quiz> getQuizById(String id);
-    List<Quiz> getQuizzesByCategoryId(String categoryId);
-    List<Quiz> getQuizzesByUserId(String userId);
-    Quiz saveQuiz(Quiz quiz);
-    void deleteQuiz(String id);
+
+    BodyResponse<List<Quiz>> getAllQuizzes();
+
+    BodyResponse<Quiz> getQuizById(String id);
+
+    BodyResponse<Quiz> saveQuiz(Quiz quiz);
+
+    BodyResponse<Void> deleteQuiz(String id);
+
+    BodyResponse<List<Quiz>> getQuizzesByCategoryId(String categoryId);
+
+    BodyResponse<List<Quiz>> getQuizzesByUserId(String userId);
 }

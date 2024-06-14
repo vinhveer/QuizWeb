@@ -1,10 +1,7 @@
 package com.vinhveer.quizappbe.controller;
 
 import com.vinhveer.quizappbe.entity.User;
-import com.vinhveer.quizappbe.model.AuthenticationRequest;
-import com.vinhveer.quizappbe.model.AuthenticationResponse;
-import com.vinhveer.quizappbe.model.ErrorResponse;
-import com.vinhveer.quizappbe.model.RegisterRequest;
+import com.vinhveer.quizappbe.payload.*;
 import com.vinhveer.quizappbe.repository.UserRepository;
 import com.vinhveer.quizappbe.service.CustomUserDetailsService;
 import com.vinhveer.quizappbe.util.JwtUtil;
@@ -38,32 +35,30 @@ public class AuthenticationController {
     private PasswordEncoder passwordEncoder;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<BodyResponse<AuthenticationResponse>> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
             );
         } catch (AuthenticationException e) {
-            ErrorResponse errorResponse = new ErrorResponse("Incorrect username or password", HttpStatus.UNAUTHORIZED.value());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BodyResponse<>(false, "Incorrect username or password", null));
         }
 
         User user = userRepository.findByUsername(authenticationRequest.getUsername());
         if (user == null) {
-            ErrorResponse errorResponse = new ErrorResponse("User not found", HttpStatus.NOT_FOUND.value());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new BodyResponse<>(false, "User not found", null));
         }
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(new AuthenticationResponse(jwt, user.getId()));
+        AuthenticationResponse authResponse = new AuthenticationResponse(jwt, user.getId());
+        return ResponseEntity.ok(new BodyResponse<>(true, "Authentication successful", authResponse));
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<BodyResponse<String>> registerUser(@RequestBody RegisterRequest registerRequest) {
         if (userRepository.findByUsername(registerRequest.getUsername()) != null) {
-            ErrorResponse errorResponse = new ErrorResponse("Username is already taken!", HttpStatus.BAD_REQUEST.value());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new BodyResponse<>(false, "Username is already taken!", null));
         }
 
         try {
@@ -77,10 +72,9 @@ public class AuthenticationController {
             newUser.setAvatar(registerRequest.getAvatar());
 
             userRepository.save(newUser);
-            return ResponseEntity.ok("User registered successfully!");
+            return ResponseEntity.ok(new BodyResponse<>(true, "User registered successfully!", null));
         } catch (Exception e) {
-            ErrorResponse errorResponse = new ErrorResponse("An error occurred during registration", HttpStatus.INTERNAL_SERVER_ERROR.value());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BodyResponse<>(false, "An error occurred during registration", null));
         }
     }
 }

@@ -1,8 +1,10 @@
 package com.vinhveer.quizappbe.controller;
 
 import com.vinhveer.quizappbe.entity.Category;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 import com.vinhveer.quizappbe.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,38 +18,32 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public List<Category> getAllCategories() {
-        return categoryService.getAllCategories();
+    public ResponseEntity<BodyResponse<List<Category>>> getAllCategories() {
+        BodyResponse<List<Category>> response = categoryService.getAllCategories();
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable String id) {
-        Category category = categoryService.getCategoryById(id);
-        if (category != null) {
-            return ResponseEntity.ok(category);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<BodyResponse<Category>> getCategoryById(@PathVariable String id) {
+        BodyResponse<Category> response = categoryService.getCategoryById(id);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(response);
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
-        return categoryService.createCategory(category);
+    public ResponseEntity<BodyResponse<Category>> createCategory(@RequestBody Category category) {
+        BodyResponse<Category> response = categoryService.createCategory(category);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable String id, @RequestBody Category category) {
-        Category updatedCategory = categoryService.updateCategory(id, category);
-        if (updatedCategory != null) {
-            return ResponseEntity.ok(updatedCategory);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<BodyResponse<Category>> updateCategory(@PathVariable String id, @RequestBody Category category) {
+        BodyResponse<Category> response = categoryService.updateCategory(id, category);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable String id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<BodyResponse<Void>> deleteCategory(@PathVariable String id) {
+        BodyResponse<Void> response = categoryService.deleteCategory(id);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND).body(response);
     }
 }

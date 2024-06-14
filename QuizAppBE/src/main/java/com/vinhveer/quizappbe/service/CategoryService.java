@@ -1,13 +1,14 @@
 package com.vinhveer.quizappbe.service;
 
 import com.vinhveer.quizappbe.entity.Category;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 
 import java.util.List;
 
 public interface CategoryService {
-    List<Category> getAllCategories();
-    Category getCategoryById(String id);
-    Category createCategory(Category category);
-    Category updateCategory(String id, Category category);
-    void deleteCategory(String id);
+    BodyResponse<List<Category>> getAllCategories();
+    BodyResponse<Category> getCategoryById(String id);
+    BodyResponse<Category> createCategory(Category category);
+    BodyResponse<Category> updateCategory(String id, Category category);
+    BodyResponse<Void> deleteCategory(String id);
 }

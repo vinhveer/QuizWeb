@@ -1,6 +1,7 @@
 package com.vinhveer.quizappbe.service.impl;
 
 import com.vinhveer.quizappbe.entity.Question;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 import com.vinhveer.quizappbe.repository.QuestionRepository;
 import com.vinhveer.quizappbe.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,22 +17,51 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
     @Override
-    public List<Question> getAllQuestions() {
-        return questionRepository.findAll();
+    public BodyResponse<List<Question>> getAllQuestions() {
+        try {
+            List<Question> questions = questionRepository.findAll();
+            return new BodyResponse<>(true, "Questions retrieved successfully", questions);
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to retrieve questions: " + e.getMessage(), null);
+        }
     }
 
     @Override
-    public Optional<Question> getQuestionById(String id) {
-        return questionRepository.findById(id);
+    public BodyResponse<Question> getQuestionById(String id) {
+        try {
+            Optional<Question> optionalQuestion = questionRepository.findById(id);
+            if (optionalQuestion.isPresent()) {
+                return new BodyResponse<>(true, "Question retrieved successfully", optionalQuestion.get());
+            } else {
+                return new BodyResponse<>(false, "Question not found", null);
+            }
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to retrieve question: " + e.getMessage(), null);
+        }
     }
 
     @Override
-    public Question saveQuestion(Question question) {
-        return questionRepository.save(question);
+    public BodyResponse<Question> saveQuestion(Question question) {
+        try {
+            Question savedQuestion = questionRepository.save(question);
+            return new BodyResponse<>(true, "Question saved successfully", savedQuestion);
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to save question: " + e.getMessage(), null);
+        }
     }
 
     @Override
-    public void deleteQuestion(String id) {
-        questionRepository.deleteById(id);
+    public BodyResponse<Void> deleteQuestion(String id) {
+        try {
+            Optional<Question> optionalQuestion = questionRepository.findById(id);
+            if (optionalQuestion.isPresent()) {
+                questionRepository.deleteById(id);
+                return new BodyResponse<>(true, "Question deleted successfully", null);
+            } else {
+                return new BodyResponse<>(false, "Question not found", null);
+            }
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to delete question: " + e.getMessage(), null);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.vinhveer.quizappbe.model;
+package com.vinhveer.quizappbe.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

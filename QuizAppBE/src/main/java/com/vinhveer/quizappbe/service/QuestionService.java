@@ -1,13 +1,13 @@
 package com.vinhveer.quizappbe.service;
 
 import com.vinhveer.quizappbe.entity.Question;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface QuestionService {
-    List<Question> getAllQuestions();
-    Optional<Question> getQuestionById(String id);
-    Question saveQuestion(Question question);
-    void deleteQuestion(String id);
+    BodyResponse<List<Question>> getAllQuestions();
+    BodyResponse<Question> getQuestionById(String id);
+    BodyResponse<Question> saveQuestion(Question question);
+    BodyResponse<Void> deleteQuestion(String id);
 }

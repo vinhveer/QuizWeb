@@ -1,4 +1,4 @@
-package com.vinhveer.quizappbe.model;
+package com.vinhveer.quizappbe.payload;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorResponse {
-    private String message;
-    private int status;
+public class AuthenticationRequest {
+    private String username;
+    private String password;
 }

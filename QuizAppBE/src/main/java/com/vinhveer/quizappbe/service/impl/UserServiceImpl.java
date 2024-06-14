@@ -17,21 +17,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        try {
+            return userRepository.findAll();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching all users", e);
+        }
     }
 
     @Override
     public Optional<User> getUserById(String id) {
-        return userRepository.findById(id);
+        try {
+            return userRepository.findById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching user by ID: " + id, e);
+        }
     }
 
     @Override
     public User saveUser(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (Exception e) {
+            throw new RuntimeException("Error saving user", e);
+        }
     }
 
     @Override
     public void deleteUser(String id) {
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting user by ID: " + id, e);
+        }
     }
 }

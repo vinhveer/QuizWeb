@@ -1,6 +1,7 @@
 package com.vinhveer.quizappbe.service.impl;
 
 import com.vinhveer.quizappbe.entity.Category;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 import com.vinhveer.quizappbe.repository.CategoryRepository;
 import com.vinhveer.quizappbe.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,35 +17,69 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
-    }
-
-    @Override
-    public Category getCategoryById(String id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        return category.orElse(null);
-    }
-
-    @Override
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
-    }
-
-    @Override
-    public Category updateCategory(String id, Category category) {
-        Optional<Category> existingCategory = categoryRepository.findById(id);
-        if (existingCategory.isPresent()) {
-            Category updatedCategory = existingCategory.get();
-            updatedCategory.setName(category.getName());
-            updatedCategory.setDescription(category.getDescription());
-            return categoryRepository.save(updatedCategory);
+    public BodyResponse<List<Category>> getAllCategories() {
+        try {
+            List<Category> categories = categoryRepository.findAll();
+            return new BodyResponse<>(true, "Categories retrieved successfully", categories);
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to retrieve categories: " + e.getMessage(), null);
         }
-        return null;
     }
 
     @Override
-    public void deleteCategory(String id) {
-        categoryRepository.deleteById(id);
+    public BodyResponse<Category> getCategoryById(String id) {
+        try {
+            Optional<Category> category = categoryRepository.findById(id);
+            if (category.isPresent()) {
+                return new BodyResponse<>(true, "Category retrieved successfully", category.get());
+            } else {
+                return new BodyResponse<>(false, "Category not found", null);
+            }
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to retrieve category: " + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public BodyResponse<Category> createCategory(Category category) {
+        try {
+            Category savedCategory = categoryRepository.save(category);
+            return new BodyResponse<>(true, "Category created successfully", savedCategory);
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to create category: " + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public BodyResponse<Category> updateCategory(String id, Category category) {
+        try {
+            Optional<Category> existingCategory = categoryRepository.findById(id);
+            if (existingCategory.isPresent()) {
+                Category updatedCategory = existingCategory.get();
+                updatedCategory.setName(category.getName());
+                updatedCategory.setDescription(category.getDescription());
+                categoryRepository.save(updatedCategory);
+                return new BodyResponse<>(true, "Category updated successfully", updatedCategory);
+            } else {
+                return new BodyResponse<>(false, "Category not found", null);
+            }
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to update category: " + e.getMessage(), null);
+        }
+    }
+
+    @Override
+    public BodyResponse<Void> deleteCategory(String id) {
+        try {
+            Optional<Category> category = categoryRepository.findById(id);
+            if (category.isPresent()) {
+                categoryRepository.deleteById(id);
+                return new BodyResponse<>(true, "Category deleted successfully", null);
+            } else {
+                return new BodyResponse<>(false, "Category not found", null);
+            }
+        } catch (Exception e) {
+            return new BodyResponse<>(false, "Failed to delete category: " + e.getMessage(), null);
+        }
     }
 }

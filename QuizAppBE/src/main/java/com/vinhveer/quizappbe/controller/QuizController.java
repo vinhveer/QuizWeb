@@ -1,13 +1,14 @@
 package com.vinhveer.quizappbe.controller;
 
 import com.vinhveer.quizappbe.entity.Quiz;
+import com.vinhveer.quizappbe.payload.BodyResponse;
 import com.vinhveer.quizappbe.service.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/quizzes")
@@ -17,45 +18,50 @@ public class QuizController {
     private QuizService quizService;
 
     @GetMapping
-    public List<Quiz> getAllQuizzes() {
-        return quizService.getAllQuizzes();
+    public ResponseEntity<BodyResponse<List<Quiz>>> getAllQuizzes() {
+        BodyResponse<List<Quiz>> response = quizService.getAllQuizzes();
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Quiz> getQuizById(@PathVariable String id) {
-        Optional<Quiz> quiz = quizService.getQuizById(id);
-        return quiz.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<BodyResponse<Quiz>> getQuizById(@PathVariable String id) {
+        BodyResponse<Quiz> response = quizService.getQuizById(id);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.NOT_FOUND).body(response);
     }
 
     @PostMapping
-    public Quiz createQuiz(@RequestBody Quiz quiz) {
-        return quizService.saveQuiz(quiz);
+    public ResponseEntity<BodyResponse<Quiz>> createQuiz(@RequestBody Quiz quiz) {
+        BodyResponse<Quiz> response = quizService.saveQuiz(quiz);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.CREATED : HttpStatus.BAD_REQUEST).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Quiz> updateQuiz(@PathVariable String id, @RequestBody Quiz quizDetails) {
-        Optional<Quiz> quiz = quizService.getQuizById(id);
-        if (quiz.isPresent()) {
-            quizDetails.setId(id);
-            return ResponseEntity.ok(quizService.saveQuiz(quizDetails));
-        } else {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<BodyResponse<Quiz>> updateQuiz(@PathVariable String id, @RequestBody Quiz quizDetails) {
+        BodyResponse<Quiz> existingQuizResponse = quizService.getQuizById(id);
+        if (!existingQuizResponse.isStatus()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(existingQuizResponse);
         }
+
+        quizDetails.setId(id);
+        BodyResponse<Quiz> updatedQuizResponse = quizService.saveQuiz(quizDetails);
+        return ResponseEntity.status(updatedQuizResponse.isStatus() ? HttpStatus.OK : HttpStatus.BAD_REQUEST).body(updatedQuizResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteQuiz(@PathVariable String id) {
-        quizService.deleteQuiz(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<BodyResponse<Void>> deleteQuiz(@PathVariable String id) {
+        BodyResponse<Void> response = quizService.deleteQuiz(id);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.NO_CONTENT : HttpStatus.NOT_FOUND).body(response);
     }
 
     @GetMapping("/category/{categoryId}")
-    public List<Quiz> getQuizzesByCategoryId(@PathVariable String categoryId) {
-        return quizService.getQuizzesByCategoryId(categoryId);
+    public ResponseEntity<BodyResponse<List<Quiz>>> getQuizzesByCategoryId(@PathVariable String categoryId) {
+        BodyResponse<List<Quiz>> response = quizService.getQuizzesByCategoryId(categoryId);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     @GetMapping("/user/{userId}")
-    public List<Quiz> getQuizzesByUserId(@PathVariable String userId) {
-        return quizService.getQuizzesByUserId(userId);
+    public ResponseEntity<BodyResponse<List<Quiz>>> getQuizzesByUserId(@PathVariable String userId) {
+        BodyResponse<List<Quiz>> response = quizService.getQuizzesByUserId(userId);
+        return ResponseEntity.status(response.isStatus() ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 }
