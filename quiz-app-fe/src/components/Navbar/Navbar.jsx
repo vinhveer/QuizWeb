@@ -1,100 +1,132 @@
-// Navbar.js
-import React, { useContext, useState, useEffect } from 'react';
-import { QuizContext } from '../../context/QuizContext';
-import { assets } from '../../assets/assets';
-import { NavLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import avatar from '../../assets/63202399.png';
 import './Navbar.css';
 
 const Navbar = () => {
-    const { user, logout } = useContext(QuizContext);
-    const loginSuccess = !!user;
-
     const [darkMode, setDarkMode] = useState(false);
 
     useEffect(() => {
-        if (darkMode) {
-            document.body.setAttribute('data-bs-theme', 'dark');
-        } else {
-            document.body.removeAttribute('data-bs-theme');
-        }
+        document.body.setAttribute('data-bs-theme', darkMode ? 'dark' : 'light');
     }, [darkMode]);
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
     };
 
+    const loginSuccess = true; // Giả sử người dùng đã đăng nhập thành công
+
     return (
         <div>
-            <nav className={`navbar navbar-expand-lg ${darkMode ? 'navbar-dark bg-dark' : 'bg-body-tertiary'}`}>
-                <div className="container-fluid ps-5 pe-5">
-                    <NavLink className="navbar-brand" to="/">
-                        <img src={assets.logo} alt="Quizz Logo" />
-                        <span>Quizz</span>
-                    </NavLink>
+            <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+                <div className="container-fluid ps-4 pe-4">
+                    <div className="brand">
+                        <a className="navbar-brand" href="#">QuizWeb</a>
+                    </div>
+                    {/* For desktop */}
                     <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav me-auto">
-                            <li className="nav-item">
-                                <NavLink exact className="nav-link" activeClassName="active" to="/">Home</NavLink>
+                        <ul className="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
+                            <li className="nav-item active-item">
+                                <a className="nav-link" href="#">
+                                    <i className="fa-solid fa-house"></i>
+                                    <span>Trang chủ</span>
+                                </a>
                             </li>
                             <li className="nav-item">
-                                <NavLink className="nav-link" activeClassName="active" to="/explore">Explore</NavLink>
+                                <a className="nav-link" href="#">
+                                    <i className="fa-solid fa-compass"></i>
+                                    <span>Khám phá</span>
+                                </a>
                             </li>
-                            {loginSuccess ? (
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">
+                                    <i className="fa-solid fa-magnifying-glass"></i>
+                                    <span>Tìm kiếm</span>
+                                </a>
+                            </li>
+                            {loginSuccess && (
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName="active" to="/my-quiz">Libary</NavLink>
+                                    <a className="nav-link" href="#">
+                                        <i className="fa-solid fa-layer-group"></i>
+                                        <span>Thư viện của tôi</span>
+                                    </a>
                                 </li>
-                            ) : null}
+                            )}
                         </ul>
                     </div>
-                    <NavLink className="nav-link me-2" activeClassName="active" to="/search"><i class="bi bi-search"></i></NavLink>
-                    <button type="button" className="btn btn-outline-secondary ms-3 me-3" onClick={toggleDarkMode}>
-                        {darkMode ? <i class="bi bi-brightness-high"></i> : <i class="bi bi-moon-stars"></i>}
-                    </button>
-                    {loginSuccess ? (
-                        <button type="button" className='btn btn-login'>
-                            <img src={user.avatar} alt="" srcSet="" className='img-avatar' data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight" />
+
+                    <div className="auth-container">
+                        <button type="button" className="btn btn-dark-mode me-3" onClick={toggleDarkMode}>
+                            {darkMode ? <i className="fa-solid fa-sun"></i> : <i className="fa-solid fa-moon"></i>}
                         </button>
-                    ) : (
-                        <ul className='ms-auto navbar-nav d-flex'>
-                            <li className="nav-item">
-                                <button className="btn btn-primary ms-2 me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                            </li>
-                            <li className="nav-item">
-                                <a className="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a>
-                            </li>
-                        </ul>
-                    )}
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav"
-                        aria-controls="navbarNav"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>   
+                        {!loginSuccess ? (
+                            <button type="button" className="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập</button>
+                        ) : (
+                            <button className="btn btn-avatar" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+                                <img src={avatar} className='avatar' />
+                            </button>)}
+                    </div>
                 </div>
             </nav>
 
-            {loginSuccess ? (
-                <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-                    <div className="offcanvas-header">
-                        <button type="button" className="btn btn-primary" onClick={logout}>Logout</button>
-                        <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                    </div>
-                    <div className="offcanvas-body text-center">
-                        <img src={user.avatar} className='img-avatar-canva'/>
-                        <div className="mt-3">
-                            <h5>{user.username}</h5>
-                            <p>{user.email}</p>
-                        </div>
-                        <div className="mt-3">
-                            
-                        </div>
-                    </div>
-                </div>) : null}
+            {/* For tablet - mobile */}
+            <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-bottom mobile-mode">
+                <div className="container-fluid">
+                    <ul className="nav-items w-100">
+                        <li className="nav-item active-item">
+                            <a className="nav-link" href="#">
+                                <i className="fa-solid fa-house"></i><br />
+                                <span>Trang chủ</span>
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">
+                                <i className="fa-solid fa-compass"></i><br />
+                                <span>Khám phá</span>
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a className="nav-link" href="#">
+                                <i className="fa-solid fa-magnifying-glass"></i><br />
+                                <span>Tìm kiếm</span>
+                            </a>
+                        </li>
+                        {loginSuccess && (
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">
+                                    <i className="fa-solid fa-layer-group"></i><br />
+                                    <span>Thư viện</span>
+                                </a>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            </nav>
+
+            <div className="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+                <div className="offcanvas-header">
+                    <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div className="offcanvas-body text-center">
+                    <img src={avatar} className='avatar-full mb-2' />
+                    <p className="fs-2 full-name">vinhveer</p>
+                    <span>vinhveer123@gmail.com</span>
+
+                    <ul className="list-group mt-4">
+                        <li className="list-group-item">
+                            <i className="fa-solid fa-user"></i>
+                            <span>Thông tin cá nhân</span>
+                        </li>
+                        <li className="list-group-item">
+                            <i className="fa-solid fa-shield-halved"></i>
+                            <span>Tài khoản và bảo mật</span>
+                        </li>
+                        <li className="list-group-item">
+                            <i className="fa-solid fa-right-to-bracket"></i>
+                            <span>Đăng xuất</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     );
 };

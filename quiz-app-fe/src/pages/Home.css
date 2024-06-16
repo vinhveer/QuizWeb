@@ -1,0 +1,53 @@
+.hero-section {
+    position: relative;
+    background-image: url('../assets/pexels-keira-burton-6146978.jpg'); /* Thay thế bằng đường dẫn đến hình ảnh của bạn */
+    background-size: cover;
+    background-position: center;
+    padding: 100px 20px;
+    color: white;
+    text-align: center;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Màu đen với độ trong suốt 60% */
+    z-index: 1; /* Đảm bảo lớp phủ nằm phía trên hình nền nhưng phía dưới nội dung */
+}
+
+.hero-heading,
+.hero-paragraph,
+.btn-get-started {
+    position: relative;
+    z-index: 2; /* Đảm bảo nội dung nằm phía trên lớp phủ */
+}
+
+.hero-heading {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-paragraph {
+    font-size: 1.25rem;
+    font-weight: 300;
+}
+
+.btn-get-started {
+    background-color: #146ebe;
+    color: white;
+    font-weight: 500;
+    border-radius: 5px;
+    border: 1px solid #146ebe;
+    padding: 10px 20px;
+    margin-top: 20px;
+}
+
+.btn-get-started:hover {
+    background-color: #0f5c9e;
+    border-color: #0f5c9e;
+}
