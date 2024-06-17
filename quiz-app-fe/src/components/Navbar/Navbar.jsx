@@ -13,7 +13,7 @@ const Navbar = () => {
         setDarkMode(!darkMode);
     };
 
-    const loginSuccess = true; // Giả sử người dùng đã đăng nhập thành công
+    const loginSuccess = false; // Giả sử người dùng đã đăng nhập thành công
 
     return (
         <div>
@@ -108,7 +108,7 @@ const Navbar = () => {
                 </div>
                 <div className="offcanvas-body text-center">
                     <img src={avatar} className='avatar-full mb-2' />
-                    <p className="fs-2 full-name">vinhveer</p>
+                    <p className="fs-2 full-name">@vinhveer</p>
                     <span>vinhveer123@gmail.com</span>
 
                     <ul className="list-group mt-4">
