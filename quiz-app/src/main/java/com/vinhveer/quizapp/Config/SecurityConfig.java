@@ -55,7 +55,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/api/auth/**"), new AntPathRequestMatcher("/ws/**"), new AntPathRequestMatcher("/upload"))
+                        .requestMatchers(new AntPathRequestMatcher("/api/auth/**"), new AntPathRequestMatcher("/upload"))
                         .permitAll()
                         .anyRequest()
                         .authenticated()

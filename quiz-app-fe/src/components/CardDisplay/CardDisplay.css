@@ -1,0 +1,12 @@
+.scrolling-wrapper {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.scrolling-wrapper .row {
+    flex-wrap: nowrap;
+}
+
+.scrolling-wrapper .row .col {
+    flex: 0 0 auto;
+}

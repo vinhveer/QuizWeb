@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,5 +52,27 @@ public class AuthController {
     public ResponseEntity<BodyResponse<UserResponse>> registerUser(@RequestBody UserRequest userRequest) {
         UserResponse userResponse = userService.createUser(userRequest);
         return ResponseEntity.ok(new BodyResponse<>("success", "User registered successfully", userResponse));
+    }
+
+    @GetMapping("/existsByUsername/{username}")
+    public ResponseEntity<BodyResponse<Boolean>> existsByUsername(@PathVariable String username) {
+        boolean exists = userService.existsByUsername(username);
+        BodyResponse<Boolean> response = new BodyResponse<>("success", exists ? "Username exists" : "Username does not exist", exists);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/existsByEmail/{email}")
+    public ResponseEntity<BodyResponse<Boolean>> existsByEmail(@PathVariable String email) {
+        boolean exists = userService.existsByEmail(email);
+        BodyResponse<Boolean> response = new BodyResponse<>("success", exists ? "Email exists" : "Email does not exist", exists);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<BodyResponse<UserResponse>> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        UserResponse userResponse = userService.getUserByUsername(username);
+        return ResponseEntity.ok(new BodyResponse<>("success", "User details retrieved successfully", userResponse));
     }
 }

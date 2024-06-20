@@ -30,6 +30,11 @@ dependencies {
     implementation 'org.springframework.session:spring-session-core'
     implementation 'org.springframework.security:spring-security-web:6.0.3'
     implementation 'org.springframework.security:spring-security-config:6.2.0'
+    implementation 'com.cloudinary:cloudinary:1.0.14'
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
+    implementation 'com.cloudinary:cloudinary-http44:1.38.0'
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-core
+    implementation 'com.cloudinary:cloudinary-core:1.38.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5' // Only needed at runtime
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5' // If using Jackson for JSON

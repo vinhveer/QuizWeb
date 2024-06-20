@@ -99,6 +99,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    }
+
+    @Override
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public UserResponse getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
+        return mapToResponse(user);
+    }
+
     private UserResponse mapToResponse(User user) {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(user.getId());
@@ -110,9 +132,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userResponse;
     }
 
+    // Change password
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+    public void changePassword(String id, String oldPassword, String newPassword) {
+        Optional<User> userOpt = userRepository.findById(id);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            if (passwordEncoder.matches(oldPassword, user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(newPassword));
+                user.setUpdateAt(LocalDateTime.now().toString());
+                userRepository.save(user);
+            } else {
+                throw new InvalidRequestException("Old password is incorrect");
+            }
+        } else {
+            throw new ResourceNotFoundException("User not found with id: " + id);
+        }
     }
 }

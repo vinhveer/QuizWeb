@@ -1,5 +1,6 @@
 package com.vinhveer.quizapp.Controller;
 
+import com.vinhveer.quizapp.Payload.Request.PasswordRequest;
 import com.vinhveer.quizapp.Payload.Request.UserRequest;
 import com.vinhveer.quizapp.Payload.Response.BodyResponse;
 import com.vinhveer.quizapp.Payload.Response.UserResponse;
@@ -51,6 +52,13 @@ public class UserController {
     public ResponseEntity<BodyResponse<Void>> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         BodyResponse<Void> response = new BodyResponse<>("success", "User deleted successfully", null);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/change-password/{id}")
+    public ResponseEntity<BodyResponse<Void>> changePassword(@PathVariable String id, @RequestBody PasswordRequest passwordRequest) {
+        userService.changePassword(id, passwordRequest.getOldPassword(), passwordRequest.getNewPassword());
+        BodyResponse<Void> response = new BodyResponse<>("success", "Password changed successfully", null);
         return ResponseEntity.ok(response);
     }
 }
