@@ -1,6 +1,6 @@
 import React from 'react'
 
-const MyLibary = () => {
+const Explore = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const MyLibary = () => {
   )
 }
 
-export default MyLibary
+export default Explore

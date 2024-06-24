@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import './Home.css';
 import { UserContext } from '../../contexts/UserContext';
-import CardDisplay from '../../components/CardDisplay/CardDisplay';
+import CardDisplayVertical from '../../components/CardDisplay/CardDisplayVertical';
 
 const Home = () => {
   const { user } = useContext(UserContext);
@@ -26,29 +26,10 @@ const Home = () => {
         </div>
       ) : (
         <div>
-          <div className="container mt-4 ms-4 me-4">
-            <div className="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4">
-              <div className="card me-3 mb-3 card-started new-quiz">
-                <div className="card-body">
-                  <h3 className="card-title">Create a new Quiz</h3>
-                  <button type="button" className='btn float-end'>
-                    <i class="fa-solid fa-arrow-right"></i>
-                  </button>
-                </div>
-              </div>
-              <div className="card me-3 mb-3 card-started live-quiz">
-                <div className="card-body">
-                  <h3 className="card-title">Join to Live Quiz</h3>
-                  <button type="button" className='btn float-end'>
-                    <i class="fa-solid fa-arrow-right"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </div>
       )}
-      <CardDisplay />
+      <CardDisplayVertical />
     </div>
   );
 }

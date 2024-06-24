@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import avatarPlaceholder from '../../assets/63202399.png';
+import logo from '../../assets/logo/svg/logo-no-background.svg';
+import logo_dark from '../../assets/logo/svg/logo-white.svg';
 import './Navbar.css';
 import { UserContext } from '../../contexts/UserContext';
 
@@ -41,37 +43,43 @@ const Navbar = () => {
 
     return (
         <div>
-            <nav className="navbar navbar-expand-lg bg-body fixed-top">
+            <nav className="navbar navbar-expand-lg bg-body-tertiary shadow-sm fixed-top">
                 <div className="container-fluid ps-4 pe-4">
-                    <div className="brand">
-                        <a className="navbar-brand" onClick={() => handleNavigation('/')}>QuizWeb</a>
+                    <div className="brand d-flex justify-content-center align-items-center">
+                        <a className="navbar-brand" onClick={() => handleNavigation('/')}>
+                            <img src={darkMode ? logo_dark : logo} alt="" srcset="" />
+                        </a>
+                        <button className="btn nav-create-quiz">
+                            <i className="fa-solid fa-square-plus"></i>
+                            Create
+                        </button>
                     </div>
                     {/* For desktop */}
                     <div className="collapse navbar-collapse" id="navbarNav">
-                        <ul className="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
+                        <ul className="navbar-nav ms-auto me-2 mb-2 mb-lg-0">
                             <li className={`nav-item ${isActive('/') ? 'active-item' : ''}`}>
                                 <a className="nav-link" onClick={() => handleNavigation('/')}>
                                     <i className="fa-solid fa-house"></i>
-                                    <span>Trang chủ</span>
+                                    <span>Home</span>
                                 </a>
                             </li>
                             <li className={`nav-item ${isActive('/explore') ? 'active-item' : ''}`}>
                                 <a className="nav-link" onClick={() => handleNavigation('/explore')}>
                                     <i className="fa-solid fa-compass"></i>
-                                    <span>Khám phá</span>
+                                    <span>Explore</span>
                                 </a>
                             </li>
                             <li className={`nav-item ${isActive('/search') ? 'active-item' : ''}`}>
                                 <a className="nav-link" onClick={() => handleNavigation('/search')}>
                                     <i className="fa-solid fa-magnifying-glass"></i>
-                                    <span>Tìm kiếm</span>
+                                    <span>Search</span>
                                 </a>
                             </li>
                             {user && (
                                 <li className={`nav-item ${isActive('/library') ? 'active-item' : ''}`}>
                                     <a className="nav-link" onClick={() => handleNavigation('/library')}>
                                         <i className="fa-solid fa-layer-group"></i>
-                                        <span>Thư viện của tôi</span>
+                                        <span>My Library</span>
                                     </a>
                                 </li>
                             )}
@@ -79,9 +87,6 @@ const Navbar = () => {
                     </div>
 
                     <div className="auth-container">
-                        <button type="button" className="btn btn-dark-mode me-3" onClick={toggleDarkMode}>
-                            {darkMode ? <i className="fa-solid fa-sun"></i> : <i className="fa-solid fa-moon"></i>}
-                        </button>
                         {!user ? (
                             <button type="button" className="btn btn-login" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập</button>
                         ) : (
@@ -100,26 +105,26 @@ const Navbar = () => {
                         <li className={`nav-item ${isActive('/') ? 'active-item' : ''}`}>
                             <a className="nav-link" onClick={() => handleNavigation('/')}>
                                 <i className="fa-solid fa-house"></i><br />
-                                <span>Trang chủ</span>
+                                <span>Home</span>
                             </a>
                         </li>
                         <li className={`nav-item ${isActive('/explore') ? 'active-item' : ''}`}>
                             <a className="nav-link" onClick={() => handleNavigation('/explore')}>
                                 <i className="fa-solid fa-compass"></i><br />
-                                <span>Khám phá</span>
+                                <span>Explore</span>
                             </a>
                         </li>
                         <li className={`nav-item ${isActive('/search') ? 'active-item' : ''}`}>
                             <a className="nav-link" onClick={() => handleNavigation('/search')}>
                                 <i className="fa-solid fa-magnifying-glass"></i><br />
-                                <span>Tìm kiếm</span>
+                                <span>Search</span>
                             </a>
                         </li>
                         {user && (
                             <li className={`nav-item ${isActive('/library') ? 'active-item' : ''}`}>
                                 <a className="nav-link" onClick={() => handleNavigation('/library')}>
                                     <i className="fa-solid fa-layer-group"></i><br />
-                                    <span>Thư viện</span>
+                                    <span>My Library</span>
                                 </a>
                             </li>
                         )}
@@ -137,17 +142,26 @@ const Navbar = () => {
                     <span>{user?.email}</span>
 
                     <ul className="list-group mt-4">
-                        <li className="list-group-item" onClick={() => handleNavigation('/personal-info')}>
-                            <i className="fa-solid fa-user"></i>
-                            <span>Thông tin cá nhân</span>
+                        <li className="list-group-item" onClick={toggleDarkMode}>
+                            {darkMode ? (
+                                <div>
+                                    <i className="fa-solid fa-sun"></i> 
+                                    <span>Light Mode</span>
+                                </div>
+                            ): (
+                                <div>
+                                    <i className="fa-solid fa-moon"></i>
+                                    <span> Dark Mode</span>
+                                </div>
+                            )}
                         </li>
                         <li className="list-group-item" onClick={() => handleNavigation('/account-settings')}>
-                            <i className="fa-solid fa-shield-halved"></i>
-                            <span>Tài khoản và bảo mật</span>
+                            <i class="fa-solid fa-gear"></i>
+                            <span>Account Settings</span>
                         </li>
                         <li className="list-group-item" onClick={handleLogout}>
                             <i className="fa-solid fa-right-to-bracket"></i>
-                            <span>Đăng xuất</span>
+                            <span>Logout</span>
                         </li>
                     </ul>
                 </div>

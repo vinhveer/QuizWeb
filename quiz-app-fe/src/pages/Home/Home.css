@@ -96,6 +96,5 @@
 }
 
 .card-started .btn:hover {
-    border-color: #0f5c9e;
     transform: translateX(10px);
 }

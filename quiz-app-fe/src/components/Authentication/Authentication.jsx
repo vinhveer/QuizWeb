@@ -127,10 +127,6 @@ const Authentication = () => {
                                         <label htmlFor="loginPassword" className="form-label">Mật khẩu</label>
                                         <input type="password" className="form-control" id="loginPassword" name="password" value={loginForm.password} onChange={handleLoginChange} />
                                     </div>
-                                    <div className="form-check mb-3">
-                                        <input type="checkbox" className="form-check-input" id="rememberMe" />
-                                        <label className="form-check-label" htmlFor="rememberMe">Ghi nhớ đăng nhập</label>
-                                    </div>
                                     <button type="button" className="btn btn-primary" onClick={handleLoginSubmit}>Đăng nhập</button>
                                 </form>
                             )}
